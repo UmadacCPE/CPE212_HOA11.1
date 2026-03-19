@@ -1,0 +1,22 @@
+---
+
+- name: Build and Run Dockefile
+  hosts: localhost
+  become: true
+  tasks:
+
+
+    - name: Build Docker image
+      community.docker.docker_image:
+        name: webdb_image
+        source: build
+        build:
+          path: "{{ playbook_dir }}"
+          dockerfile: dockerfile
+
+    - name: Run Container
+      community.docker.docker_container:
+        name: webdb_container
+        image: webdb_image
+        state: started
+        ports: "8080:80"
